@@ -190,15 +190,12 @@ public class PickerViewLinkage extends LinearLayout {
             threeList.clear();
             threeList = arrayToList(sunArray);
             checkItems(loopViewThree, threeList);
-
-            if(threeList!=null&&threeList.size()>0){
-                returnData2.setItem(threeList.get(0));
-                returnData2.setIndex(loopViewThree.getSelectedIndex());
-                if (curSelectedList.size() > 2) {
-                    curSelectedList.set(2, returnData2);
-                } else {
-                    curSelectedList.add(2, returnData2);
-                }
+            returnData2.setItem(threeList.get(0));
+            returnData2.setIndex(loopViewThree.getSelectedIndex());
+             if (curSelectedList.size() > 2) {
+                curSelectedList.set(2, returnData2);
+            } else {
+                curSelectedList.add(2, returnData2);
             }
 
             loopViewOne.setListener(new OnItemSelectedListener() {
@@ -232,17 +229,14 @@ public class PickerViewLinkage extends LinearLayout {
                     threeList.clear();
                     threeList = arrayToList(sunArray);
                     checkItems(loopViewThree, threeList);
-                    returnData2 = new ReturnData();
+                    returnData2 = new ReturnData();  
+                    returnData2.setItem(threeList.get(0));
+                    returnData2.setIndex(loopViewThree.getSelectedIndex());
+                    curSelectedList.set(2, returnData2);
 
-                    if (threeList!=null&&threeList.size()>0){
-                        returnData2.setItem(threeList.get(0));
-                        returnData2.setIndex(loopViewThree.getSelectedIndex());
-                        curSelectedList.set(2, returnData2);
-                        if (onSelectedListener != null) {
-                            onSelectedListener.onSelected(curSelectedList);
-                        }
+                    if (onSelectedListener != null) {
+                        onSelectedListener.onSelected(curSelectedList);
                     }
-
                 }
             });
 
@@ -252,6 +246,11 @@ public class PickerViewLinkage extends LinearLayout {
                     selectTwoIndex = index;
 
                     ReadableArray arr = data.get(selectOneIndex).getArray(oneList.get(selectOneIndex));
+                    int arrSize = arr.size();
+                    if(index >= arrSize)
+                    {
+                        index = arrSize - 1;
+                    }
                     ReadableMap childMap = arr.getMap(index);
                     String key = childMap.keySetIterator().nextKey();
                     ReadableArray sunArray = childMap.getArray(key);
@@ -270,24 +269,34 @@ public class PickerViewLinkage extends LinearLayout {
                     curSelectedList.set(1, returnData1);
 
                     returnData2 = new ReturnData();
-
-                    if (threeList!=null&&threeList.size()>0){
-                        returnData2.setItem(threeList.get(0));
-                        returnData2.setIndex(loopViewThree.getSelectedIndex());
-                        curSelectedList.set(2, returnData2);
-                        if (onSelectedListener != null) {
-                            onSelectedListener.onSelected(curSelectedList);
-                        }
-
+                    returnData2.setItem(threeList.get(0));
+                    returnData2.setIndex(loopViewThree.getSelectedIndex());
+                    curSelectedList.set(2, returnData2);
+                    if (onSelectedListener != null) {
+                        onSelectedListener.onSelected(curSelectedList);
                     }
-
-
                 }
             });
 
             loopViewThree.setListener(new OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(String item, int index) {
+
+
+
+                    int arrOneSize = oneList.size();
+                    if(selectOneIndex >= arrOneSize)
+                    {
+                        selectOneIndex = arrOneSize - 1;
+                    }
+
+
+                    int arrTwoSize = twoList.size();
+                    if(selectTwoIndex >= arrTwoSize)
+                    {
+                        selectTwoIndex = arrTwoSize - 1;
+                    }
+
                     returnData = new ReturnData();
                     returnData.setItem(oneList.get(selectOneIndex));
                     returnData.setIndex(loopViewOne.getSelectedIndex());
@@ -306,7 +315,7 @@ public class PickerViewLinkage extends LinearLayout {
                         onSelectedListener.onSelected(curSelectedList);
                     }
                 }
-            });
+        });
         } else {
             setRow(2);
             loopViewOne.setListener(new OnItemSelectedListener() {
